@@ -10,7 +10,8 @@ setup(
     packages=['cctools'],
     include_package_data=True,
     install_requires=[
-        'click',
+        'click==7.0',
+        'pyyaml==5.1'
     ],
     entry_points={
         'console_scripts': {
