@@ -26,17 +26,22 @@ action_number = {
 @click.option('--vcs-add/--no-vcs-add', 'vcs', default=False,
               help='Set to add the change to VCS as commit.')
 @pass_context
-def cli(ctx, language: str, file: str, action: str, vcs: bool):
+def cli(ctx,
+        language, # type: str
+        file, # type: str
+        action, # type: str
+        vcs # type: bool
+        ):
     """
     Get or increment current version in the file
 
     Supported: raw text file, npm package.json
 
-    :param ctx:
-    :param language:
-    :param file:
-    :param action:
-    :param vcs:
+    :param ctx
+    :param language: str
+    :param file: str
+    :param action: str
+    :param vcs: bool
     :return:
     """
     new_version = None
@@ -69,13 +74,17 @@ def cli(ctx, language: str, file: str, action: str, vcs: bool):
         ctx.log('Error when updating the version number')
 
 
-def increment_version(version: str, position: int = 2):
+def increment_version(version, # type: str
+                      position = 2 # type: int
+                      ):
     version = version.strip().split('.')
     version[position] = str(int(version[position]) + 1)
     return '.'.join(version)
 
 
-def vcs_add(vcs: str, files: list = None):
+def vcs_add(vcs, # type: str
+            files = None # type: list
+            ):
     if list is None:
         return
 

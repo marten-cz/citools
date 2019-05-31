@@ -26,7 +26,14 @@ def changelog():
 @click.option('-v', '--verbose', is_flag=True,
               help='Enables verbose mode.')
 @pass_context
-def add(ctx, dir: str, message: str, task: str, type: str, file: str, verbose):
+def add(ctx,
+        dir, # type: str
+        message, # type: str
+        task, # type: str
+        type, # type: str
+        file, # type: str
+        verbose # type: bool
+        ):
     """
     Create and work with changelog files
 
@@ -62,7 +69,11 @@ def add(ctx, dir: str, message: str, task: str, type: str, file: str, verbose):
 @click.option('-v', '--verbose', is_flag=True,
               help='Enables verbose mode.')
 @pass_context
-def release(ctx, version: str, dir: str, verbose):
+def release(ctx,
+            version, # type: str
+            dir, # type: str
+            verbose # type: bool
+            ):
     """
     Create and work with changelog files
 
