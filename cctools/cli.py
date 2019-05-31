@@ -3,7 +3,8 @@ import sys
 import click
 
 from cctools.context import pass_context
-from .commands.changelog.commands import changelog
+from cctools.commands.changelog.commands import changelog
+from cctools.commands.version.commands import cli as version
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='CCTOOLS')
 
@@ -33,3 +34,4 @@ def cli(ctx):
 
 
 cli.add_command(changelog)
+cli.add_command(version)

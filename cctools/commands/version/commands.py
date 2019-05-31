@@ -1,6 +1,6 @@
 import os
 import click
-from cctools.cli import pass_context
+from cctools.context import pass_context
 
 action_number = {
     'major': 0,
