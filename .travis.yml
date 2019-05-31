@@ -1,20 +1,14 @@
 language: python
-python: 3.5
-branches:
-  only:
-  - master
-  - /^\d\.\d+$/
-  - /^v\d\.\d+\.\d+(rc\d+|dev\d+)?$/
-env:
-  - TOX_ENV=py27
-  - TOX_ENV=py33
-  - TOX_ENV=py34
-  - TOX_ENV=py35
+python:
+  - 2.7
+  #- 3.2
+  #- 3.3
+  - 3.4
+  - 3.5
+cache: pip
 install:
-  - pip install -U tox twine wheel codecov
-script: tox -e $TOX_ENV
+  - pip install -U tox tox-travis twine wheel codecov coverage contextlib2
+script:
+  - tox
 after_success:
-  - codecov
-cache:
-  directories:
-  - $HOME/.cache/pip
+  - tox -e codecov

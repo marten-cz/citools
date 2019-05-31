@@ -2,10 +2,6 @@ import os
 import sys
 import click
 
-from cctools.context import pass_context
-from cctools.commands.changelog.commands import changelog
-from cctools.commands.version.commands import cli as version
-
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='CCTOOLS')
 
 
@@ -26,12 +22,4 @@ class Context(object):
             self.log(msg, *args)
 
 
-
-@click.group()
-@pass_context
-def cli(ctx):
-    pass
-
-
-cli.add_command(changelog)
-cli.add_command(version)
+pass_context = click.make_pass_decorator(Context, ensure=True)

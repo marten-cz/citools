@@ -1,6 +1,6 @@
 import click
 from click.testing import CliRunner
-from cctools.commands.cmd_version import cli
+from cctools.commands.version.commands import cli
 
 
 def test_version():
