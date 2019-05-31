@@ -1,20 +1,31 @@
 language: python
-python: 3.5
-branches:
-  only:
-  - master
-  - /^\d\.\d+$/
-  - /^v\d\.\d+\.\d+(rc\d+|dev\d+)?$/
-env:
-  - TOX_ENV=py27
-  - TOX_ENV=py33
-  - TOX_ENV=py34
-  - TOX_ENV=py35
+python:
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+cache: pip
 install:
-  - pip install -U tox twine wheel codecov
-script: tox -e $TOX_ENV
+  - pip install -U tox-travis twine wheel codecov
+script: tox
 after_success:
   - codecov
-cache:
-  directories:
-  - $HOME/.cache/pip
+deploy:
+  provider: pypi
+  edge:
+    source: jezdez/dpl
+    branch: pypi-error
+  distributions: sdist bdist_wheel
+
+
+  user: jezdez
+  password:
+    secure: BrBIl8sgjVWG8MMIRe5VJjmF+fqDiMQFn64oaQyMSjbXbD5QykBX4fg1nHPzU+hQFVobP1ErcCWTh+wbNG7HxZet0wJsdUt2P02bG/SM5Ex8IS3cLqeAF5k9y0AhO133d/LfNxw3o/B8TImEFARXZHxFqWTOy0kQTE/PTUpSEYD0XJkBClxuVyhd0HVuZJOhOJHDtBZgxDPFFqgTUemiZp84dSCJxSR8AeEWGyd5bd1sh0eK8bnv5nnONhLW/RiebcGu4+TK0DMLB5BUSSujxjKhverlWEG5Vn/ycrD2rkx3DTxOWGNzny1t9kPry8uEknMbnnxHpD6GaV3M05AZYdkqhn/bMETkKUk5djgdujcMVIB/AYrEnpNj3qfzFYINu3ro+fwweIsKRRoi+RA2o08I6ii5695MD/XEfqip7WTLdF+jFK1EiDRtq6C/tvXaK0M3YTP2GBb6q9Q5N74gQ5qMnGp55H223YAT9vhIQZCzF6zyRQijjCYPw1pWTKTH/feSEB8RmAlsbQQ5gXm4fzpSOKRyjfx3whr5C5XYj737bQYOJsSe3xc6eRSEgTDT52sqH9Qc6H+hCc3IPvILPmIVYx5UzSXMHh3B4/ciNeb87k+wOJn9711RsHY7g3ay3GpmHmqVgvS8qVFgX0tVykBqy5RjYm9EKIBpgq2XfCE=
+
+  access_key_id: xxxx
+  secret_access_key:
+    secure: xxxx
+
+
+  on:
+    tags: true
