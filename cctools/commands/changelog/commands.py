@@ -3,6 +3,9 @@ import uuid
 import yaml
 
 import click
+from datetime import date
+from jinja2 import Template
+
 from cctools.context import pass_context
 
 
@@ -45,6 +48,9 @@ def add(ctx,
     :param verbose:
     :return:
     """
+
+    #create_markdown('./tests/stubs/expected/release.yml')
+    #return
     ctx.verbose = verbose
     unreleased_path = os.path.realpath(os.path.join(os.getcwd(), dir, 'unreleased'))
 
@@ -56,7 +62,12 @@ def add(ctx,
     try:
         data = load_yaml(new_file)
         with open(new_file, 'w+') as stream:
-            data.append({'title': estr(message), 'task': estr(task), 'type': estr(type)})
+            if not data:
+                data = {'details': []}
+            if 'details' not in data:
+                data['details'] = []
+
+            data['details'] = update_change_list(data['details'], type, {'title': estr(message), 'task': estr(task)})
             stream.write(yaml.dump(data, Dumper=yaml.Dumper))
     except yaml.YAMLError as exc:
         raise click.ClickException('Error when reading yaml file')
@@ -92,23 +103,46 @@ def release(ctx,
     for file in os.listdir(unreleased_path):
         data.extend(load_yaml(os.path.realpath(os.path.join(unreleased_path, file))))
     with open(os.path.join(version_path, version + '.yml'), 'w') as stream:
-        stream.write(yaml.dump(data, Dumper=yaml.Dumper))
+        full_data = {
+            'version': version,
+            'date': date.today().strftime("%Y-%m-%d %H:%M:%S"),
+            'details': data
+        }
+        stream.write(yaml.dump(full_data, Dumper=yaml.Dumper))
 
     for file in os.listdir(unreleased_path):
         os.remove(os.path.join(unreleased_path, file))
 
 
-def load_yaml(file) -> list:
+def update_change_list(details, type, change):
+    for detail in details:
+        if detail['type'] == type:
+            detail['changes'].append(change)
+            return details
+
+    details.append({'type': type, 'changes': [change]})
+
+    return details
+
+
+def create_markdown(file):
+    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates/one-version.jj2'), 'r') as stream:
+        template = Template(stream.read())
+        data = load_yaml(file)
+        result = template.render(release=data)
+
+
+def load_yaml(file) -> dict:
     try:
         with open(file, 'r') as stream:
             data = yaml.load(stream, Loader=yaml.FullLoader)
-            if not data:
-                data = list()
-            elif not isinstance(data, list):
-                raise click.ClickException('Unsupported content in {}'.format(file))
+            #data = list()
+            #if not data:
+            #elif not isinstance(data, list):
+            #    raise click.ClickException('Unsupported content in {}'.format(file))
         return data
     except FileNotFoundError:
-        return []
+        return {}
 
 
 def estr(s):
@@ -118,3 +152,4 @@ def estr(s):
 def vcs_get_branch(vcs: str = 'git'):
     if vcs is 'git':
         return os.popen('git branch | grep \\* | cut -d \' \' -f2').read().strip()
+

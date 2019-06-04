@@ -1,0 +1,7 @@
+# {{ release.version }} - {{ release.date }}
+{% for change in release.details %}
+## {{ change.type }}
+{% for item in change.changes %}
+    * {% if item.task %}{{ item.task }} - {% endif %}{{ item.title }}
+{%- endfor %}
+{%- endfor %}
