@@ -11,7 +11,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'click==7.0',
-        'pyyaml==5.1'
+        'pyyaml==5.4'
     ],
     entry_points={
         'console_scripts': {
